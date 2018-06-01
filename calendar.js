@@ -74,8 +74,7 @@ var cellWidth = 80;
 var cellHeight = 50;
 var gapWidth = 1;
 var gapHeight = 1;
-var left = 5;
-var top = 20
+var price = '$100';
 
 function drawWeekHead () {
   for(i=1; i<7; ++i) {
@@ -110,20 +109,20 @@ function drawDay(i, j) {
     if (i == 0) {
       context.fillStyle = CanvasCalendar.settings.white;
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else {
       if (i < thisMonthFirstDay) {
-        drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor);
+        drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor, price);
       }
       else if (i == thisMonthFirstDay) {
         monthDay = 1;
-        drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor);
+        drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor, price);
       }
       else {
         ++monthDay;
-        drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
+        drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, price);
       }
     }
   }
@@ -133,11 +132,11 @@ function drawDay(i, j) {
     if (i == 0) {
       context.fillStyle = CanvasCalendar.settings.white;
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else {
-      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor);
+      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, price);
     }
   }
   // Other weeks
@@ -146,19 +145,20 @@ function drawDay(i, j) {
     if (i == 0) {
       context.fillStyle = CanvasCalendar.settings.white;
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else {
-      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
+      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, price);
     }
   }
 }
 
-function drawDayNumber(dayNumber, color) {
+function drawDayNumber(dayNumber, color, price) {
   context.fillStyle = color;
   context.font = CanvasCalendar.settings.contextFont;
   context.fillText(dayNumber, x_offset + 5, y_offset + 20);
+  context.fillText(price, x_offset + 5, y_offset + 40);
 }
 
 function daysInMonth(month, year) {
