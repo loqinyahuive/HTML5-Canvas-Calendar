@@ -74,7 +74,8 @@ var cellWidth = 80;
 var cellHeight = 50;
 var gapWidth = 1;
 var gapHeight = 1;
-var price = '$100';
+var prices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+              16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
 
 function drawWeekHead () {
   for(i=1; i<7; ++i) {
@@ -111,32 +112,56 @@ function drawDay(i, j) {
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
+      // console.log('****** thisMonthFirstDay', thisMonthFirstDay);
+      // console.log('****** prevMonthLastDate', prevMonthLastDate);
+      // console.log('****** dateOffset', dateOffset);
+      // console.log('****** i', i);
+      // console.log('****** prevMonthLastDate - (dateOffset - i) + 1', prevMonthLastDate - (dateOffset - i) + 1);
+      if (thisMonthFirstDay === 5) {
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + prices[0]);
+      } else if (thisMonthFirstDay === 4) {
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1]));
+      } else if (thisMonthFirstDay === 3) {
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2]));
+      } else if (thisMonthFirstDay === 2) {
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2] + prices[3]));
+      } else if (thisMonthFirstDay === 1) {
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2] + prices[3] + prices[4]));
+      }
     } else {
       if (i < thisMonthFirstDay) {
-        drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor, price);
+        // console.log('****** thisMonthFirstDay', thisMonthFirstDay);
+        // console.log('****** prevMonthLastDate', prevMonthLastDate);
+        // console.log('****** dateOffset', dateOffset);
+        // console.log('****** i', i);
+        // console.log('****** prevMonthLastDate - (dateOffset - i) + 1', prevMonthLastDate - (dateOffset - i) + 1);
+        drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor, '');
       }
       else if (i == thisMonthFirstDay) {
         monthDay = 1;
-        drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor, price);
+        drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor, '$' + prices[monthDay-1]);
       }
       else {
         ++monthDay;
-        drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, price);
+        drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, '$' + prices[monthDay-1]);
       }
     }
   }
   // Last weeks
   else if (thisMonthLastDate <= monthDay) {
     ++monthDay;
+    console.log('****** monthDay', monthDay);
     if (i == 0) {
       context.fillStyle = CanvasCalendar.settings.white;
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
+      // console.log('****** thisMonthLastDate', thisMonthLastDate);
+      // console.log('****** monthDay', monthDay);
+      // console.log('****** i', i);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$0');
     } else {
-      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, price);
+      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, '');
     }
   }
   // Other weeks
@@ -147,9 +172,11 @@ function drawDay(i, j) {
       context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
     } else if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
+      // console.log('****** i', i);
+      // console.log('****** monthDay', monthDay);
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[monthDay-2] + prices[monthDay-3] + prices[monthDay-4] + prices[monthDay-5] + prices[monthDay-6]));
     } else {
-      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, price);
+      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, '$' + prices[monthDay-1]);
     }
   }
 }
