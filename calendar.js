@@ -15,35 +15,33 @@ window.CanvasCalendar = {
     $year.on('change', function() {
       CanvasCalendar.refreshCalendar();
     });
-    
+
     CanvasCalendar.refreshCalendar();
   },
 
   refreshCalendar: function() {
     var selectedMonth = document.getElementById("month").value;
     var selectedYear = document.getElementById("year").value;
-    
+
     monthDay = 0;
-    
+
     selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
     var thisMonth = selectedDate.getMonth() + 1;
-    
+
     prevMonthLastDate = getLastDayOfMonth(thisMonth - 1);
     thisMonthLastDate = getLastDayOfMonth(thisMonth);
     thisMonthFirstDay = selectedDate.getDay();
     thisMonthFirstDate = selectedDate.getDate();
-    
+
     if (thisMonth == 12)
       nextMonthFirstDay = 1;
     else
       nextMonthFirstDay = thisMonth + 1;
-          
+
     dateOffset = thisMonthFirstDay;
 
     canvas = document.getElementById("calendar");
     context = canvas.getContext("2d");
-    context.fillStyle = "#f0f0f0";
-    
     CanvasCalendar.drawCalendar();
   },
 
@@ -74,53 +72,90 @@ var prevMonthColor = "#909090";
 
 var dateOffset;
 
-function refreshCalendar() {
+var weeks = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Week Net'];
 
+function drawWeekHead () {
+  for(i=1; i<7; ++i) {
+    x_offset = 7 + 86 * i;
+    y_offset = 0;
+    context.fillStyle = "#202020";
+    context.font = "bold 15px sans-serif";
+    if (i === 6) {
+      context.fillText(weeks[i], x_offset + 5, y_offset + 20);
+    } else {
+      context.fillText(weeks[i], x_offset + 25, y_offset + 20);
+    }
+  }
 }
 
 function drawWeek(j) {
+  drawWeekHead();
   for(i=0; i<7; ++i) {
     drawDay(i, j);
   }
 }
 
 function drawDay(i, j) {
-  x_offset = 7 + 106 * i;
-  y_offset = 5 + 106 * j;
-  
+  x_offset = 7 + 86 * i;
+  y_offset = 33 + 56 * j;
+
   context.fillStyle = "#f0f0f0";
-  context.fillRect(x_offset, y_offset, 100, 100); 
-  
+  context.fillRect(x_offset, y_offset, 80, 50);
+
   // First week
   if (j == 0) {
-    if (i < thisMonthFirstDay) {
-      drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor);
+    if (i == 0) {
+      context.fillStyle = "#fff";
+      context.fillRect(x_offset, y_offset, 80, 50);
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else if (i == 6) {
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else {
+      if (i < thisMonthFirstDay) {
+        drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor);
+      }
+      else if (i == thisMonthFirstDay) {
+        monthDay = 1;
+        drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor);
+      }
+      else {
+        ++monthDay;
+        drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
+      }
     }
-    else if (i == thisMonthFirstDay) {
-      monthDay = 1;
-      drawDayNumber(thisMonthFirstDate + (dateOffset - i), CanvasCalendar.settings.thisMonthColor);
-    }
-    else {
-      ++monthDay;
-      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
-    }
-  }     
+  }
   // Last weeks
   else if (thisMonthLastDate <= monthDay) {
     ++monthDay;
-    drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor);
+    if (i == 0) {
+      context.fillStyle = "#fff";
+      context.fillRect(x_offset, y_offset, 80, 50);
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else if (i == 6) {
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else {
+      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor);
+    }
   }
   // Other weeks
   else {
     ++monthDay;
-    drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
+    if (i == 0) {
+      context.fillStyle = "#fff";
+      context.fillRect(x_offset, y_offset, 80, 50);
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else if (i == 6) {
+      context.fillText('', x_offset + 5, y_offset + 20);
+    } else {
+      drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor);
+    }
   }
 }
 
 function drawDayNumber(dayNumber, color) {
   context.fillStyle = color;
-  context.font = "bold 32px sans-serif";
-  context.fillText(dayNumber, x_offset + 10, y_offset + 35);
+  context.font = "bold 15px sans-serif";
+  context.fillText(dayNumber, x_offset + 5, y_offset + 20);
 }
 
 function getLastDayOfMonth(month, year)
@@ -147,7 +182,7 @@ function getLastDayOfMonth(month, year)
       day = 30;
       break;
     case 2 :
-      if( ( (year % 4 == 0) && ( year % 100 != 0) ) 
+      if( ( (year % 4 == 0) && ( year % 100 != 0) )
                || (year % 400 == 0) )
         day = 29;
       else
