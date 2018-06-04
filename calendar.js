@@ -79,7 +79,7 @@ var prices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 
 function drawWeekHead () {
   for(i=1; i<7; ++i) {
-    x_offset = (cellWidth + gapWidth) * i;
+    x_offset = (cellWidth + gapWidth) * (i - 1);
     y_offset = 0;
     context.fillStyle = CanvasCalendar.settings.headColor;
     context.font = CanvasCalendar.settings.headFont;
@@ -99,7 +99,8 @@ function drawWeek(j) {
 }
 
 function drawDay(i, j) {
-  x_offset = (cellWidth + gapWidth) * i;
+  if (i == 0) i = 6;
+  x_offset = (cellWidth + gapWidth) * (i - 1);
   y_offset = 30 + (cellHeight + gapHeight) * j;
 
   context.fillStyle = CanvasCalendar.settings.baseColor;
@@ -107,16 +108,8 @@ function drawDay(i, j) {
 
   // First week
   if (j == 0) {
-    if (i == 0) {
-      context.fillStyle = CanvasCalendar.settings.white;
-      context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
-    } else if (i == 6) {
-      // console.log('****** thisMonthFirstDay', thisMonthFirstDay);
-      // console.log('****** prevMonthLastDate', prevMonthLastDate);
-      // console.log('****** dateOffset', dateOffset);
-      // console.log('****** i', i);
-      // console.log('****** prevMonthLastDate - (dateOffset - i) + 1', prevMonthLastDate - (dateOffset - i) + 1);
+    if (i == 6) {
+      ++monthDay;
       if (thisMonthFirstDay === 5) {
         drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + prices[0]);
       } else if (thisMonthFirstDay === 4) {
@@ -130,11 +123,6 @@ function drawDay(i, j) {
       }
     } else {
       if (i < thisMonthFirstDay) {
-        // console.log('****** thisMonthFirstDay', thisMonthFirstDay);
-        // console.log('****** prevMonthLastDate', prevMonthLastDate);
-        // console.log('****** dateOffset', dateOffset);
-        // console.log('****** i', i);
-        // console.log('****** prevMonthLastDate - (dateOffset - i) + 1', prevMonthLastDate - (dateOffset - i) + 1);
         drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor, '');
       }
       else if (i == thisMonthFirstDay) {
@@ -151,14 +139,7 @@ function drawDay(i, j) {
   else if (thisMonthLastDate <= monthDay) {
     ++monthDay;
     console.log('****** monthDay', monthDay);
-    if (i == 0) {
-      context.fillStyle = CanvasCalendar.settings.white;
-      context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
-    } else if (i == 6) {
-      // console.log('****** thisMonthLastDate', thisMonthLastDate);
-      // console.log('****** monthDay', monthDay);
-      // console.log('****** i', i);
+    if (i == 6) {
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$0');
     } else {
       drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, '');
@@ -167,13 +148,8 @@ function drawDay(i, j) {
   // Other weeks
   else {
     ++monthDay;
-    if (i == 0) {
-      context.fillStyle = CanvasCalendar.settings.white;
-      context.fillRect(x_offset, y_offset, cellWidth, cellHeight);
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '');
-    } else if (i == 6) {
-      // console.log('****** i', i);
-      // console.log('****** monthDay', monthDay);
+    console.log('******** ++monthDay', monthDay);
+    if (i == 6) {
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[monthDay-2] + prices[monthDay-3] + prices[monthDay-4] + prices[monthDay-5] + prices[monthDay-6]));
     } else {
       drawDayNumber(monthDay, CanvasCalendar.settings.thisMonthColor, '$' + prices[monthDay-1]);
