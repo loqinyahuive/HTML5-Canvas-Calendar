@@ -27,6 +27,7 @@ window.CanvasCalendar = {
     var thisMonth = selectedDate.getMonth() + 1;
     prevMonthLastDate = daysInMonth(thisMonth - 1, selectedYear);
     thisMonthLastDate = daysInMonth(thisMonth, selectedYear);
+    thisMonthLastDay = new Date(selectedMonth + " " + thisMonthLastDate +", " + selectedYear).getDay();
     thisMonthFirstDay = selectedDate.getDay();
     thisMonthFirstDate = selectedDate.getDate();
 
@@ -43,7 +44,7 @@ window.CanvasCalendar = {
   },
 
   drawCalendar: function() {
-    for(j = 0; j < 6; ++j) {
+    for(j = 0; j < 5; ++j) {
       drawWeek(j);
     }
   },
@@ -65,6 +66,7 @@ var prevMonthLastDate;
 var thisMonthLastDate;
 var thisMonthFirstDay;
 var nextMonthFirstDay;
+var thisMonthLastDay;
 var monthDay;
 var thisMonthColor = "#202020";
 var prevMonthColor = "#909090";
@@ -110,17 +112,21 @@ function drawDay(i, j) {
   if (j == 0) {
     if (i == 6) {
       ++monthDay;
+      var firstWeekPrice = 0;
       if (thisMonthFirstDay === 5) {
-        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + prices[0]);
+        firstWeekPrice = prices[0];
       } else if (thisMonthFirstDay === 4) {
-        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1]));
+        firstWeekPrice = prices[0] + prices[1];
       } else if (thisMonthFirstDay === 3) {
-        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2]));
+        firstWeekPrice = prices[0] + prices[1] + prices[2];
       } else if (thisMonthFirstDay === 2) {
-        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2] + prices[3]));
+        firstWeekPrice = prices[0] + prices[1] + prices[2] + prices[3];
       } else if (thisMonthFirstDay === 1) {
-        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[0] + prices[1] + prices[2] + prices[3] + prices[4]));
+        firstWeekPrice = prices[0] + prices[1] + prices[2] + prices[3] + prices[4];
+      } else if (thisMonthFirstDay === 0) {
+        firstWeekPrice = prices[1] + prices[2] + prices[3] + prices[4] + prices[5];
       }
+      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + firstWeekPrice);
     } else {
       if (i < thisMonthFirstDay) {
         drawDayNumber(prevMonthLastDate - (dateOffset - i) + 1, CanvasCalendar.settings.prevMonthColor, '');
@@ -138,17 +144,27 @@ function drawDay(i, j) {
   // Last weeks
   else if (thisMonthLastDate <= monthDay) {
     ++monthDay;
-    console.log('****** monthDay', monthDay);
-    if (i == 6) {
-      drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$0');
-    } else {
-      drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, '');
-    }
+      if (i == 6) {
+        var lastWeekPrice = 0;
+        if (thisMonthLastDay == 5) {
+          lastWeekPrice = prices[thisMonthLastDate-1] + prices[thisMonthLastDate-2] + prices[thisMonthLastDate-3] + prices[thisMonthLastDate-4] + prices[thisMonthLastDate-5];
+        } else if (thisMonthLastDay == 4) {
+          lastWeekPrice = prices[thisMonthLastDate-1] + prices[thisMonthLastDate-2] + prices[thisMonthLastDate-3] + prices[thisMonthLastDate-4];
+        } else if (thisMonthLastDay == 3) {
+          lastWeekPrice = prices[thisMonthLastDate-1] + prices[thisMonthLastDate-2] + prices[thisMonthLastDate-3];
+        } else if (thisMonthLastDay == 2) {
+          lastWeekPrice = prices[thisMonthLastDate-1] + prices[thisMonthLastDate-2];
+        } else if (thisMonthLastDay == 1) {
+          lastWeekPrice = prices[thisMonthLastDate-1];
+        }
+        drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + lastWeekPrice);
+      } else {
+        drawDayNumber(monthDay - thisMonthLastDate, CanvasCalendar.settings.prevMonthColor, '');
+      }
   }
   // Other weeks
   else {
     ++monthDay;
-    console.log('******** ++monthDay', monthDay);
     if (i == 6) {
       drawDayNumber('', CanvasCalendar.settings.thisMonthColor, '$' + (prices[monthDay-2] + prices[monthDay-3] + prices[monthDay-4] + prices[monthDay-5] + prices[monthDay-6]));
     } else {
