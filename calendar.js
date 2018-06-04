@@ -22,6 +22,8 @@ window.CanvasCalendar = {
   refreshCalendar: function() {
     var selectedMonth = document.getElementById("month").value;
     var selectedYear = document.getElementById("year").value;
+    // var selectedMonth = "January";
+    // var selectedYear = 2018;
     monthDay = 0;
     selectedDate = new Date(selectedMonth + " 1, " + selectedYear);
     var thisMonth = selectedDate.getMonth() + 1;

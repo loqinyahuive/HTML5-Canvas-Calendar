@@ -1,13 +1,10 @@
 <html>
   <head>
     <title>HTML5 Canvas Calendar</title>
-    <link rel="stylesheet" type="text/css" href="page.css" />
     <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="calendar.js"></script>
   </head>
   <body>
-    <h1>HTML5 Canvas Calendar</h1>
-
     <div class="date-selection">
       <select id="month">
         <option>January</option>
@@ -24,15 +21,12 @@
         <option>December</option>
       </select>
 
-      <input type="text" value="2018" size="1" id="year" />
+      <input type="text" value="2018" size="1" id="year" style="widht:200px !important" />
     </div>
     <section>
-      <canvas id="calendar" width="750" height="645">
+      <canvas id="calendar" width="490" height="290">
         We're sorry, you don't have a browser that supports the &lt;canvas&gt; tag. :(
       </canvas>
     </section>
-    <footer>
-      This was created by <a href="http://sudoit.org">Chuck Callebs</a>.
-    </footer>
   </body>
 </html>
